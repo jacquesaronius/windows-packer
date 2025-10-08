@@ -1,0 +1,53 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "name": "windows2022-proxmox",
+      "memory": "4096",
+      "cpus": "4",
+      "iso_url": "http://localhost:8080/Windows2022.iso",
+      "iso_checksum": "sha256:3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325",
+      "output_directory": "output-windows2022-proxmox",
+      "vm_name": "win2022-template",
+      "disk_size": "61440",
+      "format": "qcow2",
+      "disk_interface": "virtio",
+      "net_device": "virtio-net",
+      "headless": true,
+      "accelerator": "kvm",
+      "communicator": "winrm",
+      "winrm_username": "Administrator",
+      "winrm_password": "p@ssw0rd",
+      "winrm_timeout": "6h",
+      "winrm_port": 5985,
+      "winrm_insecure": true,
+      "winrm_use_ssl": false,
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "http_directory": "http",
+      "floppy_files": [
+        "floppy/autounattend.xml",
+        "scripts/enable-winrm.ps1"
+      ],
+      "cd_files": [
+        "http/virt/viostor/2k22/amd64",
+        "http/virt/NetKVM/2k22/amd64"
+      ],
+      "boot_wait": "1m"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "powershell",
+      "scripts": [
+        "scripts/enable-winrm.ps1"
+      ]
+    },
+    {
+      "type": "powershell",
+      "inline": [
+        "Write-Host 'WinRM is working!'"
+      ]
+    }
+  ]
+
+}
