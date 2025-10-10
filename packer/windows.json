@@ -20,32 +20,59 @@
       "winrm_password": "p@ssw0rd",
       "winrm_timeout": "6h",
       "winrm_port": 5985,
+      "vnc_port_min": 5901,
+      "vnc_port_max": 5901,
+      "qemuargs" : [
+        ["-vnc", ":1"]
+      ],
       "winrm_insecure": true,
       "winrm_use_ssl": false,
       "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
       "http_directory": "http",
       "floppy_files": [
         "floppy/autounattend.xml",
+        "scripts/install-guest-additions.ps1",
         "scripts/enable-winrm.ps1"
       ],
       "cd_files": [
-        "http/virt/viostor/2k22/amd64",
-        "http/virt/NetKVM/2k22/amd64"
+        "http/virt"
       ],
-      "boot_wait": "1m"
+      "boot_wait": "1s"
     }
   ],
   "provisioners": [
     {
       "type": "powershell",
+      "inline": [
+        "Write-Host 'WinRM is working!'"
+      ]
+    },
+    {
+      "type": "powershell",
       "scripts": [
-        "scripts/enable-winrm.ps1"
+        "scripts/install-chocolatey.ps1"
       ]
     },
     {
       "type": "powershell",
       "inline": [
-        "Write-Host 'WinRM is working!'"
+        "Write-Host 'Installing software...'",
+        "choco install -y git",
+        "choco install -y googlechrome",
+        "choco install -y notepadplusplus",
+        "choco install -y 7zip",
+        "choco install -y sysinternals",
+        "choco install -y wireshark",
+        "choco install -y vlc",
+        "choco install -y python",
+        "choco install -y vscode",
+        "Write-Host 'Software installation complete.'"
+      ]
+    },
+    {
+      "type": "powershell",
+      "scripts": [
+        "scripts/sysprep.ps1"
       ]
     }
   ]

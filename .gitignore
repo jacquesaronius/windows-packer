@@ -1,3 +1,5 @@
 *.iso
 packer/http/*
 !packer/http/.gitkeep
+output*/
+!packer/http/virt

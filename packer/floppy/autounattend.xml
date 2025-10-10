@@ -11,12 +11,16 @@
         <component name="Microsoft-Windows-PnpCustomizationsWinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
             <DriverPaths>
                 <PathAndCredentials wcm:action="add" wcm:keyValue="DriverPath1">
-                    <Path>E:\amd64</Path>
-                    <Credentials>
-                        <Domain>.</Domain>
-                        <Username>Administrator</Username>
-                        <Password>p@ssw0rd</Password>
-                    </Credentials>
+                    <Path>E:\virt\NetKVM\2k22\amd64</Path>
+                </PathAndCredentials>
+                <PathAndCredentials wcm:action="add" wcm:keyValue="DriverPath2">
+                    <Path>E:\virt\viostor\2k22\amd64</Path>
+                </PathAndCredentials>
+                <PathAndCredentials wcm:action="add" wcm:keyValue="DriverPath3">
+                    <Path>E:\virt\Balloon\2k22\amd64</Path>
+                </PathAndCredentials>
+                <PathAndCredentials wcm:action="add" wcm:keyValue="DriverPath4">
+                    <Path>E:\virt\qemufwcfg\2k22\amd64</Path>
                 </PathAndCredentials>
             </DriverPaths>
         </component>
@@ -36,7 +40,7 @@
                     <WillShowUI>Never</WillShowUI>
                 </OSImage>
             </ImageInstall>
-            <DiskConfiguration>
+            <DiskConfiguration wcm:action="add">
                 <Disk>
                     <DiskID>0</DiskID>
                     <WillWipeDisk>true</WillWipeDisk>
@@ -68,6 +72,18 @@
     </settings>
     <settings pass="oobeSystem">
         <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+            <FirstLogonCommands>
+                <SynchronousCommand>
+                    <CommandLine>powershell.exe -ExecutionPolicy Bypass -File a:\install-guest-additions.ps1</CommandLine>
+                    <Description>Enable WinRM</Description>
+                    <Order>1</Order>
+                </SynchronousCommand>
+                <SynchronousCommand>
+                    <CommandLine>powershell.exe -ExecutionPolicy Bypass -File a:\enable-winrm.ps1</CommandLine>
+                    <Description>Enable WinRM</Description>
+                    <Order>2</Order>
+                </SynchronousCommand>
+            </FirstLogonCommands>
             <OOBE>
                 <HideEULAPage>true</HideEULAPage>
                 <SkipMachineOOBE>true</SkipMachineOOBE>
