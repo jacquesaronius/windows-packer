@@ -3,7 +3,7 @@
     {
       "type": "qemu",
       "name": "windows2022-proxmox",
-      "memory": "4096",
+      "memory": "8192",
       "cpus": "4",
       "iso_url": "http://localhost:8080/Windows2022.iso",
       "iso_checksum": "sha256:3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325",
@@ -23,7 +23,8 @@
       "vnc_port_min": 5901,
       "vnc_port_max": 5901,
       "qemuargs" : [
-        ["-vnc", ":1"]
+        ["-vnc", ":1"],
+        ["-cpu", "SandyBridge"]
       ],
       "winrm_insecure": true,
       "winrm_use_ssl": false,
