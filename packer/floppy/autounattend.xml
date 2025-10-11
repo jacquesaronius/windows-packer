@@ -75,7 +75,7 @@
             <FirstLogonCommands>
                 <SynchronousCommand>
                     <CommandLine>powershell.exe -ExecutionPolicy Bypass -File a:\install-guest-additions.ps1</CommandLine>
-                    <Description>Enable WinRM</Description>
+                    <Description>Install Guest Addtions</Description>
                     <Order>1</Order>
                 </SynchronousCommand>
                 <SynchronousCommand>
