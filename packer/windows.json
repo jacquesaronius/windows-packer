@@ -34,7 +34,8 @@
       "floppy_files": [
         "floppy/autounattend.xml",
         "scripts/install-guest-additions.ps1",
-        "scripts/enable-winrm.ps1"
+        "scripts/enable-winrm.ps1",
+        "scripts/windows-update.ps1"
       ],
       "cd_files": [
         "http/virt"
@@ -60,7 +61,6 @@
       "inline": [
         "Write-Host 'Installing software...'",
         "choco install -y git",
-        "choco install -y googlechrome",
         "choco install -y notepadplusplus",
         "choco install -y 7zip",
         "choco install -y sysinternals",
@@ -70,7 +70,14 @@
         "choco install -y vscode",
         "Write-Host 'Software installation complete.'"
       ]
+    },
+    {
+      "type": "powershell",
+      "inline": [
+        "Write-Host 'Prepare for sysprep...'",
+        "Stop-Service iphlpsvc",  
+        "Set-Service iphlpsvc -StartupType Disabled"
+      ]
     }
   ]
-
 }

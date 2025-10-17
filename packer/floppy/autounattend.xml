@@ -83,6 +83,11 @@
                     <Description>Enable WinRM</Description>
                     <Order>2</Order>
                 </SynchronousCommand>
+                <SynchronousCommand>
+                    <CommandLine>powershell.exe -ExecutionPolicy Bypass -File a:\windows-update.ps1</CommandLine>
+                    <Description>Install Windows Updates and reboot</Description>
+                    <Order>3</Order>
+                </SynchronousCommand>
             </FirstLogonCommands>
             <OOBE>
                 <HideEULAPage>true</HideEULAPage>

@@ -1,18 +1,22 @@
-Write-Host "Enabling WinRM..."
+Write-Host "Preparing WinRM configuration for post-reboot activation..."
 
-Enable-PSRemoting -Force
+# Set WinRM service to start automatically but don't start it yet
+Set-Service -Name WinRM -StartupType Automatic
 
-Write-Host "Deleting existing WinRM listeners..."
-winrm delete winrm/config/Listener?Address=*+Transport=HTTP
-
-Write-Host "Creating new WinRM listener..."
-winrm create winrm/config/Listener?Address=*+Transport=HTTP
-
-Write-Host "Configuring WinRM authentication..."
-winrm set winrm/config/service/auth '@{Basic="true"}'
-winrm set winrm/config/service '@{AllowUnencrypted="true"}'
-
-Write-Host "Configuring firewall rules..."
+# Configure firewall rule now
 New-NetFirewallRule -Name "WinRM HTTP" -DisplayName "WinRM HTTP" -Enabled True -Profile Any -Direction Inbound -Action Allow -Protocol TCP -LocalPort 5985
 
-Write-Host "WinRM configuration complete."
+# Schedule post-reboot WinRM activation
+$script = @"
+winrm delete winrm/config/Listener?Address=*+Transport=HTTP
+winrm create winrm/config/Listener?Address=*+Transport=HTTP
+winrm set winrm/config/service/auth '@{Basic=`"true`"}'
+winrm set winrm/config/service '@{AllowUnencrypted=`"true`"}'
+"@
+$path = "$env:ProgramData\WinRM-PostBoot.ps1"
+$script | Set-Content -Path $path
+
+# Schedule task to run after reboot
+schtasks /create /tn "EnableWinRMPostBoot" /tr "powershell -ExecutionPolicy Bypass -File `"$path`"" /sc onstart /ru SYSTEM /f
+
+Write-Host "WinRM configuration staged. Will activate after reboot."
